@@ -1,0 +1,17 @@
+language: java
+cache:
+  directories:
+    - $HOME/.m2
+jdk:
+  - openjdk8
+script: echo "Running verification"
+jobs:
+  include:
+    - stage: Verify whitelist
+      install: skip
+      script:
+        - ./.circleci/verifyWhitelist.sh
+        - docker run -d -p 3306:3306 --name=mysql -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=mall mysql
+        - docker run -d -p 6379:6379 --name=redis redis
+        - sleep 20
+        - mvn verify

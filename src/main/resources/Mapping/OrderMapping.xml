@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.hcsp.dao.TestDao">
+    <select id="getOrderRank" resultMap="orderMap">
+        SELECT
+            t.id,
+            t.user_id,
+            t1.id                 AS goods_id,
+            t1.NAME,
+            t.price,
+            t.quantity,
+            sum(price * quantity) AS totalPrice
+        FROM
+            goods t1
+            LEFT JOIN `order` t ON t.goods_id = t1.id
+        GROUP BY
+            t1.`name`
+        ORDER BY
+            totalPrice DESC
+    </select>
+    <resultMap type="Order" id="orderMap">
+        <id column="id" property="id"/>
+        <result column="goods_id" property="goods_id"/>
+        <result column="user_id" property="user_id"/>
+        <result column="price" property="price"/>
+        <result column="quantity" property="quantity"/>
+        <result column="totalPrice" property="totalPrice"/>
+        <association property="goods" javaType="Goods">
+            <result property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+</mapper>

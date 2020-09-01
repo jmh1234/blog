@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.hcsp.dao.AuthDao">
+    <insert id="insertUserInfo" parameterType="User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO user (username, password, avatar)
+        VALUES (#{username}, #{password}, 'https://blog-server.hunger-valley.com/avatar/69.jpg')
+    </insert>
+</mapper>
