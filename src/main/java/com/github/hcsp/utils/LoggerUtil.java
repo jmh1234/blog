@@ -29,7 +29,7 @@ public class LoggerUtil {
      * @param e 异常信息
      * @return String
      */
-    public static String handleException(Throwable e) {
+    public static String formatException(Throwable e) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         e.printStackTrace(new PrintStream(bos));
         return bos.toString();

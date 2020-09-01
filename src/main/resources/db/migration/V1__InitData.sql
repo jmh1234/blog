@@ -33,11 +33,11 @@ CREATE TABLE `order`
   DEFAULT CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO user (id, username, password, avatar, CREATED_AT, UPDATED_AT)
+/*INSERT INTO user (id, username, password, avatar, CREATED_AT, UPDATED_AT)
 VALUES (1, '张三', '123456', 'https://blog-server.hunger-valley.com/avatar/69.jpg', NOW(), NOW()),
   (2, '李四', '123456', 'https://blog-server.hunger-valley.com/avatar/69.jpg', NOW(), NOW()),
   (3, '王五', '123456', 'https://blog-server.hunger-valley.com/avatar/69.jpg', NOW(), NOW()),
-  (4, '赵六', '123456', 'https://blog-server.hunger-valley.com/avatar/69.jpg', NOW(), NOW());
+  (4, '赵六', '123456', 'https://blog-server.hunger-valley.com/avatar/69.jpg', NOW(), NOW());*/
 
 INSERT INTO goods (id, name)
 VALUES (100, '苹果'),

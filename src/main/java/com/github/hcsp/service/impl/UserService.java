@@ -16,18 +16,18 @@ public class UserService implements UserDetailsService {
     @Resource
     private UserDao userDao;
 
-    private User getInfoByUsername(String username) {
-        return userDao.getInfoByUsername(username);
+    public User getUserInfoByUsername(String username) {
+        return userDao.getUserInfoByUsername(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = getInfoByUsername(username);
+        User user = getUserInfoByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(username + " 不存在！");
         }
 
         return new org.springframework.security.core.userdetails.User(
-                username, user.getEncryptedPassword(), Collections.emptyList());
+                username, user.getPassword(), Collections.emptyList());
     }
 }

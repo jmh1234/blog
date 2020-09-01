@@ -1,7 +1,7 @@
 package com.github.hcsp.aspect;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.hcsp.entity.RespJson;
+import com.github.hcsp.entity.LoginResult;
 import com.github.hcsp.utils.Regex;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,8 +20,8 @@ public class AuthenticationAdvice {
     @Around("@annotation(com.github.hcsp.aspect.AuthenticationAspect)")
     public Object cacheAdvice(ProceedingJoinPoint process) {
         Object[] args = process.getArgs();
-        RespJson regex = Regex.isMatch((JSONObject)args[0]);
-        if (regex.isSuccess()) {
+        LoginResult regex = Regex.isMatch((JSONObject) args[0]);
+        if (regex.getIsLogin()) {
             Object proceed = null;
             try {
                 proceed = process.proceed();

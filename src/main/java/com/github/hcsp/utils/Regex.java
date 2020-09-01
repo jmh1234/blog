@@ -2,7 +2,7 @@ package com.github.hcsp.utils;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.hcsp.entity.RespJson;
+import com.github.hcsp.entity.LoginResult;
 
 public class Regex {
 
@@ -13,28 +13,19 @@ public class Regex {
 
     }
 
-    public static RespJson isMatch(JSONObject usernameAndPassword) {
-        RespJson respJson = new RespJson();
+    public static LoginResult isMatch(JSONObject usernameAndPassword) {
         try {
             String username = usernameAndPassword.getString("username");
             String password = usernameAndPassword.getString("password");
             if (!username.matches(usernameRegex)) {
-                respJson.setSuccess(false);
-                respJson.setMsg("用户名不符合规则，请仔细检查");
-                return respJson;
+                return LoginResult.failure("用户名不符合规则，请仔细检查!");
             } else if (!password.matches(passwordRegex)) {
-                respJson.setSuccess(false);
-                respJson.setMsg("密码不符合规则，请仔细检查");
-                return respJson;
+                return LoginResult.failure("密码不符合规则，请仔细检查!");
             } else {
-                respJson.setSuccess(true);
-                respJson.setMsg("注册成功！");
-                return respJson;
+                return LoginResult.success("注册成功!", true);
             }
         } catch (Exception e) {
-            respJson.setSuccess(false);
-            respJson.setMsg("用户名或密码为空，无法进行注册！");
-            return respJson;
+            return LoginResult.failure("用户名或密码为空，无法进行注册!");
         }
     }
 }

@@ -2,8 +2,7 @@ package com.github.hcsp.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.hcsp.aspect.AuthenticationAspect;
-import com.github.hcsp.entity.RespJson;
-import com.github.hcsp.entity.User;
+import com.github.hcsp.entity.LoginResult;
 import com.github.hcsp.service.AuthService;
 import com.github.hcsp.service.impl.UserService;
 import com.github.hcsp.utils.LoggerUtil;
@@ -35,42 +34,59 @@ public class AuthController {
 
     private static final Logger logger = LoggerUtil.getInstance(AuthController.class);
 
+    @ResponseBody
+    @GetMapping("/auth")
+    public LoginResult auth() {
+        return authService.getCurrentUser()
+                .map(LoginResult::success)
+                .orElse(LoginResult.success("用户没有登录", false));
+    }
+
+    @ResponseBody
+    @GetMapping("/auth/logout")
+    public LoginResult logout() {
+        LoginResult ret = authService.getCurrentUser()
+                .map(user -> LoginResult.success("success", false))
+                .orElse(LoginResult.failure("用户没有登录"));
+        SecurityContextHolder.clearContext();
+        return ret;
+    }
+
+    @ResponseBody
     @AuthenticationAspect()
     @PostMapping("/register")
-    public RespJson register(@RequestBody JSONObject usernameAndPassword, HttpServletRequest request) {
+    public LoginResult register(@RequestBody JSONObject usernameAndPassword, HttpServletRequest request) {
         try {
             String username = usernameAndPassword.getString("username");
             String password = usernameAndPassword.getString("password");
-
-            authService.insertUserInfo(new User(username, password));
-
-            return new RespJson(true, "注册成功!", login(usernameAndPassword, request));
+            authService.insertUserInfo(username, password);
+            login(usernameAndPassword, request);
+            return LoginResult.success("注册成功!", userService.getUserInfoByUsername(username));
         } catch (DuplicateKeyException duplicateKeyException) {
-            return new RespJson(false, "账号重复!", null);
+            return LoginResult.failure("账号重复!");
         }
     }
 
-    @PostMapping("/login")
     @ResponseBody
+    @PostMapping("/login")
+    @AuthenticationAspect()
     public Object login(@RequestBody JSONObject usernameAndPassword, HttpServletRequest request) {
-        System.out.println(request.getHeader("user-agent"));
-//        if (request.getHeader("user-agent") == null || !request.getHeader("user-agent").contains("Mozilla")) {
-//            return "死爬虫去死吧";
-//        }
-
+        if (request.getHeader("user-agent") == null || !request.getHeader("user-agent").contains("Mozilla")) {
+            return "死爬虫去死吧";
+        }
         String username = usernameAndPassword.get("username").toString();
         String password = usernameAndPassword.get("password").toString();
-
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password, Collections.emptyList());
-
         try {
             authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(token);
-            return new RespJson(true, "登录成功!", userService.loadUserByUsername(username));
+            return LoginResult.success("登录成功", userService.getUserInfoByUsername(username));
         } catch (UsernameNotFoundException e) {
-            return new RespJson(false, "用户不存在!", null);
+            logger.error(LoggerUtil.formatException(e));
+            return LoginResult.failure("用户不存在");
         } catch (BadCredentialsException e) {
-            return new RespJson(false, "密码不正确!", null);
+            logger.error(LoggerUtil.formatException(e));
+            return LoginResult.failure("密码不正确");
         }
     }
 }

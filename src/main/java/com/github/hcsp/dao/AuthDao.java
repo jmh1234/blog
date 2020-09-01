@@ -1,10 +1,10 @@
 package com.github.hcsp.dao;
 
-import com.github.hcsp.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuthDao {
-    int insertUserInfo(User user) throws DuplicateKeyException;
+    void insertUserInfo(@Param("username") String username, @Param("password") String password) throws DuplicateKeyException;
 }
