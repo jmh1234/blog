@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Blog {
-    private Integer id;
+    private int id;
     private String title;
     private String description;
     private String content;

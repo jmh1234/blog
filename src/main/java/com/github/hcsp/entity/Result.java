@@ -5,12 +5,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public abstract class Result<T> {
+abstract class Result<T> {
     public enum ResultStatus {
         OK("ok"),
         FAIL("fail");
         private String status;
-
         ResultStatus(String status) {
             this.status = status;
         }

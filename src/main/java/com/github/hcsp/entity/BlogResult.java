@@ -10,10 +10,6 @@ public class BlogResult extends Result<Blog> {
         return new BlogResult(ResultStatus.OK, msg, null);
     }
 
-    public static BlogResult success(Blog blog) {
-        return new BlogResult(ResultStatus.OK, null, blog);
-    }
-
     public static BlogResult failure(String msg) {
         return new BlogResult(ResultStatus.FAIL, msg, null);
     }

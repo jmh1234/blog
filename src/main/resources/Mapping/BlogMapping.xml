@@ -4,10 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.github.hcsp.dao.BlogDao">
     <insert id="addBlogInfo" parameterType="Blog">
+        <selectKey resultType="INTEGER" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         INSERT INTO blog (title, description, content, user_id)
-        VALUES (#{title}, #{description}, #{content}, #{userId})
+        VALUES (#{title}, #{description}, #{content}, #{user_id})
     </insert>
-    <select id="getBlogInfoById" resultMap="blogMap" parameterType="string">
+    <select id="getBlogInfoById" resultMap="blogMap" parameterType="int">
         SELECT
         t.title,
         t.description,
@@ -26,6 +29,46 @@
             AND t.id = #{blogId}
         </if>
     </select>
+    <select id="getBlogListByUserId" parameterType="int" resultMap="blogMap">
+        SELECT
+        t.title,
+        t.description,
+        t.content,
+        t.user_id,
+        t.created_at,
+        t.updated_at,
+        t1.username,
+        t1.avatar,
+        t.id
+        FROM blog t
+        LEFT JOIN user t1
+        ON t.user_id = t1.id
+        WHERE 1 = 1
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+    </select>
+    <update id="updateBlogById" parameterType="Blog">
+        UPDATE blog SET updated_at=NOW()
+        <if test="title != null">
+            , title = #{title}
+        </if>
+        <if test="description != null">
+            , description = #{description}
+        </if>
+        <if test="content != null">
+            , content = #{content}
+        </if>
+        WHERE 1 = 1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+    </update>
+    <delete id="deleteBlogById" parameterType="int">
+        <if test="blogId != null">
+            DELETE FROM blog WHERE id = #{blogId}
+        </if>
+    </delete>
     <resultMap type="Blog" id="blogMap">
         <id column="id" property="id"/>
         <result column="title" property="title"/>

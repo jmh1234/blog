@@ -1,16 +1,19 @@
 package com.github.hcsp.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.hcsp.aspect.AuthenticationAdvice;
+import com.github.hcsp.aspect.AuthenticationAspect;
 import com.github.hcsp.entity.Blog;
 import com.github.hcsp.entity.BlogResult;
-import com.github.hcsp.entity.User;
-import com.github.hcsp.service.AuthService;
 import com.github.hcsp.service.BlogService;
-import org.springframework.util.StringUtils;
+import com.github.hcsp.utils.AssertUtils;
+import com.github.hcsp.utils.Pagination;
+import com.github.hcsp.utils.Util;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/blog")
@@ -19,46 +22,50 @@ public class BlogController {
     @Resource
     private BlogService blogService;
 
-    @Resource
-    private AuthService authService;
+    private static final int pageSize = 5;
 
     @ResponseBody
+    @AuthenticationAspect
     @PostMapping("/create")
     public BlogResult create(@RequestBody JSONObject blogObject) {
-
-        String title = blogObject.getString("title");
-        String description = blogObject.getString("description");
-        String content = blogObject.getString("content");
-        if (StringUtils.isEmpty(title) || title.length() > 100) {
-            return BlogResult.failure("博客内容不能为空，且不超过10000个字符");
-        }
-
-        if (StringUtils.isEmpty(content) || content.length() > 10000) {
-            return BlogResult.failure("博客标题不能为空，且不超过100个字符");
-        }
-
-        if (StringUtils.isEmpty(description)) {
-            if (content.length() < 500) {
-                description = content;
-            } else {
-                description = content.substring(0, 500) + "...";
-            }
-        }
-
-        // 获取用户ID
-        Optional<User> currentUser = authService.getCurrentUser();
-        if (!currentUser.isPresent()) {
-            return BlogResult.failure("登录后才能操作");
-        }
-        Integer userId = currentUser.get().getId();
-        Blog blog = new Blog(title, description, content, userId);
-        blogService.addBlogInfo(blog);
-        return BlogResult.success("博客新建成功");
+        return blogService.addBlogInfo(fromParam(blogObject));
     }
 
     @ResponseBody
     @GetMapping("/blogDetail/{blogId}")
-    public BlogResult getBlogDetail(@PathVariable("blogId") String blogId) {
+    public BlogResult getBlogDetail(@PathVariable("blogId") int blogId) {
         return BlogResult.success("获取成功", blogService.getBlogInfoById(blogId));
+    }
+
+    @ResponseBody
+    @GetMapping("/getBlogList")
+    public Pagination<Blog> getBlogList(@Param("page") Integer page, @Param("userId") Integer userId) {
+        return blogService.getBlogListByUserId(Util.getPageNumAndPageSize(pageSize, page), userId);
+    }
+
+    @ResponseBody
+    @AuthenticationAspect
+    @PatchMapping("/updateBlog/{blogId}")
+    public BlogResult updateBlog(@PathVariable("blogId") int blogId, @RequestBody JSONObject blogObject) {
+        return blogService.updateBlogById(fromParam(blogObject), blogId);
+    }
+
+    @ResponseBody
+    @AuthenticationAspect
+    @DeleteMapping("/deleteBlog/{blogId}")
+    public BlogResult deleteBlog(@PathVariable("blogId") int blogId) {
+        return blogService.deleteBlogById(blogId);
+    }
+
+    private Blog fromParam(JSONObject params) {
+        String title = params.getString("title");
+        String content = params.getString("content");
+        String description = params.getString("description");
+        AssertUtils.assertTrue(StringUtils.isNotBlank(title) && title.length() < 100, "title is invalid!");
+        AssertUtils.assertTrue(StringUtils.isNotBlank(content) && content.length() < 10000, "content is invalid");
+        if (StringUtils.isBlank(description)) {
+            description = content.substring(0, Math.min(content.length(), 10)) + "...";
+        }
+        return new Blog(title, description, content, AuthenticationAdvice.userId);
     }
 }

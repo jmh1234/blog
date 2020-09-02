@@ -6,6 +6,7 @@ import com.github.hcsp.entity.LoginResult;
 import com.github.hcsp.service.AuthService;
 import com.github.hcsp.service.impl.UserService;
 import com.github.hcsp.utils.LoggerUtil;
+import com.github.hcsp.utils.Regex;
 import org.slf4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,15 +54,19 @@ public class AuthController {
     }
 
     @ResponseBody
-    @AuthenticationAspect()
     @PostMapping("/register")
     public LoginResult register(@RequestBody JSONObject usernameAndPassword, HttpServletRequest request) {
         try {
             String username = usernameAndPassword.getString("username");
             String password = usernameAndPassword.getString("password");
-            authService.insertUserInfo(username, password);
-            login(usernameAndPassword, request);
-            return LoginResult.success("注册成功", userService.getUserInfoByUsername(username));
+            LoginResult regex = Regex.isMatch(usernameAndPassword);
+            if (regex.getIsLogin()) {
+                authService.insertUserInfo(username, password);
+                login(usernameAndPassword, request);
+                return LoginResult.success("注册成功", userService.getUserInfoByUsername(username));
+            } else {
+                return regex;
+            }
         } catch (DuplicateKeyException duplicateKeyException) {
             return LoginResult.failure("账号重复");
         }
@@ -69,7 +74,6 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/login")
-    @AuthenticationAspect()
     public Object login(@RequestBody JSONObject usernameAndPassword, HttpServletRequest request) {
         if (request.getHeader("user-agent") == null || !request.getHeader("user-agent").contains("Mozilla")) {
             return "死爬虫去死吧";
