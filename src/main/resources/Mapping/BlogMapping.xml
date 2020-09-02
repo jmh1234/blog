@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.hcsp.dao.BlogDao">
+    <insert id="addBlogInfo" parameterType="Blog">
+        INSERT INTO blog (title, description, content, user_id)
+        VALUES (#{title}, #{description}, #{content}, #{userId})
+    </insert>
+    <select id="getBlogInfoById" resultMap="blogMap" parameterType="string">
+        SELECT
+        t.title,
+        t.description,
+        t.content,
+        t.user_id,
+        t.created_at,
+        t.updated_at,
+        t1.username,
+        t1.avatar,
+        t.id
+        FROM blog t
+        LEFT JOIN user t1
+        ON t.user_id = t1.id
+        WHERE 1 = 1
+        <if test="blogId != null">
+            AND t.id = #{blogId}
+        </if>
+    </select>
+    <resultMap type="Blog" id="blogMap">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="content" property="content"/>
+        <result column="user_id" property="user_id"/>
+        <result column="created_at" property="created_at"/>
+        <result column="updated_at" property="updated_at"/>
+        <association property="user" javaType="User">
+            <result column="user_id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="avatar" property="avatar"/>
+        </association>
+    </resultMap>
+</mapper>

@@ -35,18 +35,18 @@ public class AuthController {
     private static final Logger logger = LoggerUtil.getInstance(AuthController.class);
 
     @ResponseBody
-    @GetMapping("/auth")
-    public LoginResult auth() {
+    @GetMapping("/isLogin")
+    public LoginResult isLogin() {
         return authService.getCurrentUser()
                 .map(LoginResult::success)
                 .orElse(LoginResult.success("用户没有登录", false));
     }
 
     @ResponseBody
-    @GetMapping("/auth/logout")
+    @GetMapping("/logout")
     public LoginResult logout() {
         LoginResult ret = authService.getCurrentUser()
-                .map(user -> LoginResult.success("success", false))
+                .map(user -> LoginResult.success("用户注销成功", false))
                 .orElse(LoginResult.failure("用户没有登录"));
         SecurityContextHolder.clearContext();
         return ret;
@@ -61,9 +61,9 @@ public class AuthController {
             String password = usernameAndPassword.getString("password");
             authService.insertUserInfo(username, password);
             login(usernameAndPassword, request);
-            return LoginResult.success("注册成功!", userService.getUserInfoByUsername(username));
+            return LoginResult.success("注册成功", userService.getUserInfoByUsername(username));
         } catch (DuplicateKeyException duplicateKeyException) {
-            return LoginResult.failure("账号重复!");
+            return LoginResult.failure("账号重复");
         }
     }
 

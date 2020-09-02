@@ -7,4 +7,10 @@
         INSERT INTO user (username, password, avatar)
         VALUES (#{username}, #{password}, 'https://blog-server.hunger-valley.com/avatar/69.jpg')
     </insert>
+    <select id="getUserInfoByUsername" resultType="User" parameterType="string">
+        SELECT * FROM user WHERE 1 = 1
+        <if test="username != null">
+            AND username = #{username}
+        </if>
+    </select>
 </mapper>

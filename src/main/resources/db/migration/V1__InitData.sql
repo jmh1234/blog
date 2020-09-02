@@ -6,8 +6,22 @@ CREATE TABLE user
   COMMENT '用户名',
   password   VARCHAR(100) COMMENT '密码',
   avatar     VARCHAR(100) COMMENT '头像',
-  CREATED_AT TIMESTAMP NOT NULL DEFAULT NOW(),
-  UPDATED_AT TIMESTAMP NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+)
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+-- 博客表
+CREATE TABLE blog
+(
+  id          BIGINT             AUTO_INCREMENT PRIMARY KEY,
+  title       VARCHAR(100) COMMENT '博客标题',
+  description VARCHAR(1000) COMMENT '博客内容简要描述',
+  content  VARCHAR(10000) COMMENT '博客内容',
+  user_id     BIGINT COMMENT '博客用户ID',
+  created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
 )
   DEFAULT CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;

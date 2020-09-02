@@ -1,6 +1,6 @@
 package com.github.hcsp.service.impl;
 
-import com.github.hcsp.dao.UserDao;
+import com.github.hcsp.dao.AuthDao;
 import com.github.hcsp.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,10 +14,10 @@ import java.util.Collections;
 public class UserService implements UserDetailsService {
 
     @Resource
-    private UserDao userDao;
+    private AuthDao authDao;
 
     public User getUserInfoByUsername(String username) {
-        return userDao.getUserInfoByUsername(username);
+        return authDao.getUserInfoByUsername(username);
     }
 
     @Override

@@ -1,0 +1,24 @@
+package com.github.hcsp.entity;
+
+public class BlogResult extends Result<Blog> {
+
+    private BlogResult(ResultStatus status, String msg, Blog blog) {
+        super(status, msg, blog);
+    }
+
+    public static BlogResult success(String msg) {
+        return new BlogResult(ResultStatus.OK, msg, null);
+    }
+
+    public static BlogResult success(Blog blog) {
+        return new BlogResult(ResultStatus.OK, null, blog);
+    }
+
+    public static BlogResult failure(String msg) {
+        return new BlogResult(ResultStatus.FAIL, msg, null);
+    }
+
+    public static BlogResult success(String msg, Blog blog) {
+        return new BlogResult(ResultStatus.OK, msg, blog);
+    }
+}
