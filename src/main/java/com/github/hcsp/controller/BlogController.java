@@ -10,7 +10,6 @@ import com.github.hcsp.utils.AssertUtils;
 import com.github.hcsp.utils.Pagination;
 import com.github.hcsp.utils.Util;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,7 +38,7 @@ public class BlogController {
 
     @ResponseBody
     @GetMapping("/getBlogList")
-    public Pagination<Blog> getBlogList(@Param("page") Integer page, @Param("userId") Integer userId) {
+    public Pagination<Blog> getBlogList(@RequestParam("page") Integer page, @RequestParam("userId") Integer userId) {
         return blogService.getBlogListByUserId(Util.getPageNumAndPageSize(pageSize, page), userId);
     }
 

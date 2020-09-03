@@ -6,7 +6,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthDao {
+public interface UserDao {
 
     User getUserInfoByUsername(String username);
 

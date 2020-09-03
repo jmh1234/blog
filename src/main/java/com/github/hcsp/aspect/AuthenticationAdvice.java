@@ -2,7 +2,7 @@ package com.github.hcsp.aspect;
 
 import com.github.hcsp.entity.BlogResult;
 import com.github.hcsp.entity.User;
-import com.github.hcsp.service.AuthService;
+import com.github.hcsp.service.impl.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class AuthenticationAdvice {
 
     @Resource
-    private AuthService authService;
+    private UserService userService;
 
     public static int userId;
 
@@ -28,7 +28,7 @@ public class AuthenticationAdvice {
     @Around("@annotation(com.github.hcsp.aspect.AuthenticationAspect)")
     public Object cacheAdvice(ProceedingJoinPoint process) {
         // 获取用户ID
-        Optional<User> currentUser = authService.getCurrentUser();
+        Optional<User> currentUser = userService.getCurrentUser();
         if (!currentUser.isPresent()) {
             return BlogResult.failure("登录后才能操作");
         }

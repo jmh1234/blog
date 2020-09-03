@@ -1,9 +1,7 @@
 package com.github.hcsp.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.hcsp.aspect.AuthenticationAspect;
 import com.github.hcsp.entity.LoginResult;
-import com.github.hcsp.service.AuthService;
 import com.github.hcsp.service.impl.UserService;
 import com.github.hcsp.utils.LoggerUtil;
 import com.github.hcsp.utils.Regex;
@@ -12,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +21,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
-
-    @Resource
-    private AuthService authService;
+public class UserController {
 
     @Resource
     private UserService userService;
@@ -33,12 +29,12 @@ public class AuthController {
     @Resource
     private AuthenticationManager authenticationManager;
 
-    private static final Logger logger = LoggerUtil.getInstance(AuthController.class);
+    private static final Logger logger = LoggerUtil.getInstance(UserController.class);
 
     @ResponseBody
     @GetMapping("/isLogin")
     public LoginResult isLogin() {
-        return authService.getCurrentUser()
+        return userService.getCurrentUser()
                 .map(LoginResult::success)
                 .orElse(LoginResult.success("用户没有登录", false));
     }
@@ -46,7 +42,7 @@ public class AuthController {
     @ResponseBody
     @GetMapping("/logout")
     public LoginResult logout() {
-        LoginResult ret = authService.getCurrentUser()
+        LoginResult ret = userService.getCurrentUser()
                 .map(user -> LoginResult.success("用户注销成功", false))
                 .orElse(LoginResult.failure("用户没有登录"));
         SecurityContextHolder.clearContext();
@@ -61,7 +57,7 @@ public class AuthController {
             String password = usernameAndPassword.getString("password");
             LoginResult regex = Regex.isMatch(usernameAndPassword);
             if (regex.getIsLogin()) {
-                authService.insertUserInfo(username, password);
+                userService.insertUserInfo(username, password);
                 login(usernameAndPassword, request);
                 return LoginResult.success("注册成功", userService.getUserInfoByUsername(username));
             } else {
@@ -82,7 +78,9 @@ public class AuthController {
         String password = usernameAndPassword.get("password").toString();
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password, Collections.emptyList());
         try {
-            authenticationManager.authenticate(token);
+            System.out.println(token);
+            Authentication authenticate = authenticationManager.authenticate(token);
+            System.out.println(authenticate);
             SecurityContextHolder.getContext().setAuthentication(token);
             return LoginResult.success("登录成功", userService.getUserInfoByUsername(username));
         } catch (UsernameNotFoundException e) {
