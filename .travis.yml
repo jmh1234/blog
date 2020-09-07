@@ -11,7 +11,7 @@ jobs:
       install: skip
       script:
         - ./.circleci/verifyWhitelist.sh
-        - docker run -d -p 3306:3306 --name=mysql -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=mall mysql
+        - docker run -d -p 3306:3306 --name=mysql -e MYSQL_ROOT_PASSWORD=fnst-3d3k -e MYSQL_DATABASE=mall mysql_my
         - docker run -d -p 6379:6379 --name=redis redis
         - sleep 20
         - mvn verify
