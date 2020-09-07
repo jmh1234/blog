@@ -3,8 +3,6 @@ package com.github.hcsp.service.impl;
 import com.github.hcsp.dao.UserDao;
 import com.github.hcsp.entity.User;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,11 +27,6 @@ public class UserService implements UserDetailsService {
 
     public void insertUserInfo(String username, String password) throws DuplicateKeyException {
         userDao.insertUserInfo(username, bCryptPasswordEncoder.encode(password));
-    }
-
-    public Optional<User> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return Optional.ofNullable(userDao.getUserInfoByUsername(authentication == null ? null : authentication.getName()));
     }
 
     @Override

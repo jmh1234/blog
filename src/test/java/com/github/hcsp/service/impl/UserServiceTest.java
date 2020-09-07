@@ -29,15 +29,18 @@ class UserServiceTest {
 
     @Test
     void getUserInfoByUsername() {
-        userService.getUserInfoByUsername("jhgfcky3");
-        Mockito.verify(mockDao).getUserInfoByUsername("jhgfcky3");
+        when(mockDao.getUserInfoByUsername("jhgfcky3")).thenReturn(new User("jhgfcky3", "123456"));
+        User user = userService.getUserInfoByUsername("jhgfcky3");
+        Assertions.assertEquals("jhgfcky3", user.getUsername());
+        Assertions.assertEquals("123456", user.getPassword());
     }
 
     @Test
     void insertUserInfo() {
         when(mockEncoder.encode("123456")).thenReturn("1234567");
         userService.insertUserInfo("jhgfcky3", "123456");
-        Mockito.verify(mockDao).insertUserInfo("jhgfcky3", "1234567");
+        UserDao userDao = Mockito.verify(mockDao);
+        userDao.insertUserInfo("jhgfcky3", "1234567");
     }
 
     @Test
