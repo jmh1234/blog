@@ -1,6 +1,5 @@
 package com.github.hcsp.service.impl;
 
-import com.github.hcsp.aspect.AuthenticationAdvice;
 import com.github.hcsp.dao.BlogDao;
 import com.github.hcsp.entity.Blog;
 import com.github.hcsp.entity.BlogResult;
@@ -19,6 +18,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Resource
     private BlogDao blogDao;
+
+    @Resource
+    private AuthService authService;
 
     @Override
     public BlogResult addBlogInfo(Blog blog) {
@@ -52,7 +54,7 @@ public class BlogServiceImpl implements BlogService {
         if (blog1 == null) {
             return BlogResult.failure("博客不存在");
         } else {
-            if (!blog1.getUser_id().equals(AuthenticationAdvice.userId)) {
+            if (!blog1.getUser_id().equals(authService.getCurrentUser().get().getId())) {
                 return BlogResult.failure("无法修改别人的博客");
             } else {
                 blog.setId(blog1.getId());
@@ -68,7 +70,7 @@ public class BlogServiceImpl implements BlogService {
         if (blog == null) {
             return BlogResult.failure("博客不存在");
         } else {
-            if (!blog.getUser_id().equals(AuthenticationAdvice.userId)) {
+            if (!blog.getUser_id().equals(authService.getCurrentUser().get().getId())) {
                 return BlogResult.failure("无法修改别人的博客");
             } else {
                 blogDao.deleteBlogById(blogId);

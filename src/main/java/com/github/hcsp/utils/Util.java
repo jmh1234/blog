@@ -12,14 +12,14 @@ public class Util {
 
     public static Map<String, Integer> getPageNumAndPageSize(HttpServletRequest request) {
         Map<String, Integer> resultMap = new HashMap<>();
-        int pageSize;
+        Integer pageSize;
         if (request.getParameter("pageSize") == null) {
             pageSize = 1;
         } else {
             pageSize = Integer.valueOf(request.getParameter("pageSize"));
         }
 
-        int num;
+        Integer num;
         if (request.getParameter("pageNum") == null) {
             num = 1;
         } else {

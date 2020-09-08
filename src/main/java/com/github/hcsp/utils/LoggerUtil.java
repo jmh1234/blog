@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 public class LoggerUtil {
     private static volatile Logger logger = null;
@@ -30,8 +31,13 @@ public class LoggerUtil {
      * @return String
      */
     public static String formatException(Throwable e) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        e.printStackTrace(new PrintStream(bos));
-        return bos.toString();
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            e.printStackTrace(new PrintStream(bos, true, "UTF-8"));
+            return bos.toString("UTF-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+            return null;
+        }
     }
 }

@@ -19,8 +19,6 @@ public class AuthenticationAdvice {
     @Resource
     private AuthService authService;
 
-    public static int userId;
-
     private AuthenticationAdvice() {
 
     }
@@ -32,7 +30,6 @@ public class AuthenticationAdvice {
         if (!currentUser.isPresent()) {
             return BlogResult.failure("登录后才能操作");
         }
-        userId = currentUser.get().getId();
         Object proceed = null;
         try {
             proceed = process.proceed();

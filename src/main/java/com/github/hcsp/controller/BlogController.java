@@ -1,11 +1,11 @@
 package com.github.hcsp.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.hcsp.aspect.AuthenticationAdvice;
 import com.github.hcsp.aspect.AuthenticationAspect;
 import com.github.hcsp.entity.Blog;
 import com.github.hcsp.entity.BlogResult;
 import com.github.hcsp.service.BlogService;
+import com.github.hcsp.service.impl.AuthService;
 import com.github.hcsp.utils.AssertUtils;
 import com.github.hcsp.utils.Pagination;
 import com.github.hcsp.utils.Util;
@@ -20,6 +20,9 @@ public class BlogController {
 
     @Resource
     private BlogService blogService;
+
+    @Resource
+    private AuthService authService;
 
     private static final int pageSize = 5;
 
@@ -65,6 +68,6 @@ public class BlogController {
         if (StringUtils.isBlank(description)) {
             description = content.substring(0, Math.min(content.length(), 10)) + "...";
         }
-        return new Blog(title, description, content, AuthenticationAdvice.userId);
+        return new Blog(title, description, content, authService.getCurrentUser().get().getId());
     }
 }
