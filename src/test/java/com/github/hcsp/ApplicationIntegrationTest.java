@@ -64,7 +64,7 @@ public class ApplicationIntegrationTest {
     }
 
     private void runSql(String sql) throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mall?characterEncoding=utf-8&serverTimezone=UTC", "root", "fnst-3d3k");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&serverTimezone=UTC", "root", "fnst-3d3k");
         try (Statement statement = conn.createStatement()) {
             statement.execute(sql);
         }

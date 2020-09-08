@@ -149,7 +149,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>4.1.2</version>
                 <configuration>
-                    <url>jdbc:mysql://localhost:3306/mall?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
+                    <url>jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
                     <user>root</user>
                     <password>fnst-3d3k</password>
                 </configuration>
@@ -161,7 +161,7 @@
                             <goal>migrate</goal>
                         </goals>
                         <configuration>
-                            <url>jdbc:mysql://localhost:3306/mall?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
+                            <url>jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
                             <user>root</user>
                             <password>fnst-3d3k</password>
                         </configuration>
@@ -259,7 +259,7 @@
                                 <!--<argument>-e</argument>-->
                                 <!--<argument>MYSQL_ROOT_PASSWORD=fnst-3d3k</argument>-->
                                 <!--<argument>-e</argument>-->
-                                <!--<argument>MYSQL_DATABASE=mall</argument>-->
+                                <!--<argument>MYSQL_DATABASE=test</argument>-->
                                 <!--<argument>-p</argument>-->
                                 <!--<argument>3306:3306</argument>-->
                                 <!--<argument>-d</argument>-->
