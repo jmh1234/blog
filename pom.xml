@@ -149,7 +149,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>4.1.2</version>
                 <configuration>
-                    <url>jdbc:mysql://192.168.99.100:3306/mall?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
+                    <url>jdbc:mysql://localhost:3306/mall?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
                     <user>root</user>
                     <password>fnst-3d3k</password>
                 </configuration>
@@ -161,7 +161,7 @@
                             <goal>migrate</goal>
                         </goals>
                         <configuration>
-                            <url>jdbc:mysql://192.168.99.100:3306/mall?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
+                            <url>jdbc:mysql://localhost:3306/mall?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</url>
                             <user>root</user>
                             <password>fnst-3d3k</password>
                         </configuration>
