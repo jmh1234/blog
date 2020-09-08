@@ -1,13 +1,8 @@
 package com.github.hcsp.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.Arrays;
 
-@Getter
-@Setter
 public class CacheKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,10 +11,15 @@ public class CacheKey implements Serializable {
     private Object thisObject;
     private Object[] arguments;
 
-    public CacheKey(String methodName, Object thisObject, Object[] arguments) {
+
+    private CacheKey(String methodName, Object thisObject, Object[] arguments) {
         this.methodName = methodName;
         this.thisObject = thisObject;
         this.arguments = arguments;
+    }
+
+    public CacheKey(String methodName, Object thisObject, Object[] arguments, Object object) {
+        this(methodName, thisObject, arguments);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class CacheAdvice {
         boolean cacheIsValid = false;
 
         // 判断缓存是否失效
-        CacheKey cacheKey = new CacheKey(method.getName(), object, process.getArgs());
+        CacheKey cacheKey = new CacheKey(method.getName(), object, process.getArgs(), object);
         CacheValue cacheValue = (CacheValue) redisTemplate.opsForValue().get(String.valueOf(cacheKey.hashCode()));
         int i = method.getAnnotation(CacheAspect.class).cacheSecond();
         if (cacheValue != null && System.currentTimeMillis() - cacheValue.getTime() <= i * 1000) {
