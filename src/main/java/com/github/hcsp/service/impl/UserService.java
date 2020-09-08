@@ -9,17 +9,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
 import java.util.Collections;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    @Resource
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserDao userDao;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Resource
-    private UserDao userDao;
+    @Inject
+    public UserService(UserDao userDao, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userDao = userDao;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     public User getUserInfoByUsername(String username) {
         return userDao.getUserInfoByUsername(username);

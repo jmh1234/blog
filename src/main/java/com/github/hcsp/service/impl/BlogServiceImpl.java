@@ -9,18 +9,21 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class BlogServiceImpl implements BlogService {
 
-    @Resource
-    private BlogDao blogDao;
+    private final BlogDao blogDao;
+    private final AuthService authService;
 
-    @Resource
-    private AuthService authService;
+    @Inject
+    public BlogServiceImpl(AuthService authService, BlogDao blogDao) {
+        this.blogDao = blogDao;
+        this.authService = authService;
+    }
 
     @Override
     public BlogResult addBlogInfo(Blog blog) {
