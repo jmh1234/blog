@@ -1,8 +1,9 @@
 package com.github.hcsp.service;
 
 import com.github.hcsp.entity.Blog;
+import com.github.hcsp.entity.BlogListResult;
 import com.github.hcsp.entity.BlogResult;
-import com.github.hcsp.utils.Pagination;
+import com.github.hcsp.entity.User;
 
 import java.util.Map;
 
@@ -11,9 +12,9 @@ public interface BlogService {
 
     Blog getBlogInfoById(int blogId);
 
-    Pagination<Blog> getBlogListByUserId(Map<String, Integer> pageNumAndPageSize, Integer userId);
+    BlogListResult getBlogListByUserId(Map<String, Integer> pageNumAndPageSize, Blog blog);
 
-    BlogResult updateBlogById(Blog blog, int blogId);
+    BlogResult updateBlogById(int blogId, Blog blog);
 
-    BlogResult deleteBlogById(int blogId);
+    BlogResult deleteBlogById(int blogId, User user);
 }

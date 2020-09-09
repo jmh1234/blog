@@ -9,19 +9,19 @@ public class LoginResult extends Result<User> {
     }
 
     public static LoginResult success(String msg, boolean isLogin) {
-        return new LoginResult(ResultStatus.OK, msg, null, isLogin);
+        return new LoginResult(ResultStatus.ok, msg, null, isLogin);
     }
 
     public static LoginResult success(User user) {
-        return new LoginResult(ResultStatus.OK, null, user, true);
+        return new LoginResult(ResultStatus.ok, null, user, true);
     }
 
     public static LoginResult failure(String msg) {
-        return new LoginResult(ResultStatus.FAIL, msg, null, false);
+        return new LoginResult(ResultStatus.fail, msg, null, false);
     }
 
     public static LoginResult success(String msg, User user) {
-        return new LoginResult(ResultStatus.OK, msg, user, true);
+        return new LoginResult(ResultStatus.ok, msg, user, true);
     }
 
     public boolean getIsLogin() {

@@ -8,48 +8,49 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO blog (title, description, content, user_id)
-        VALUES (#{title}, #{description}, #{content}, #{user_id})
+        VALUES (#{title}, #{description}, #{content}, #{userId})
     </insert>
-    <select id="getBlogInfoById" resultMap="blogMap" parameterType="int">
+    <select id="getBlogInfoById" resultMap="blog" parameterType="int">
         SELECT
-        t.title,
-        t.description,
-        t.content,
-        t.user_id,
-        t.created_at,
-        t.updated_at,
-        t1.username,
-        t1.avatar,
-        t.id
-        FROM blog t
-        LEFT JOIN user t1
-        ON t.user_id = t1.id
-        WHERE 1 = 1
-        <if test="blogId != null">
-            AND t.id = #{blogId}
-        </if>
+            blog.id          AS blog_id,
+            blog.title       AS blog_title,
+            blog.description AS blog_description,
+            blog.content     AS blog_content,
+            blog.updated_at  AS blog_updated_at,
+            blog.created_at  AS blog_created_at,
+            user.id          AS user_id,
+            user.username    AS user_username,
+            user.avatar      AS user_avatar,
+            user.updated_at  AS user_updated_at,
+            user.created_at  AS user_created_at
+        FROM blog
+            LEFT OUTER JOIN user
+                ON blog.user_id = user.id
+        WHERE blog.id = #{blogId}
     </select>
-    <select id="getBlogListByUserId" parameterType="int" resultMap="blogMap">
+    <select id="getBlogListByUserId" parameterType="Blog" resultMap="blog">
         SELECT
-        t.title,
-        t.description,
-        t.content,
-        t.user_id,
-        t.created_at,
-        t.updated_at,
-        t1.username,
-        t1.avatar,
-        t.id
-        FROM blog t
-        LEFT JOIN user t1
-        ON t.user_id = t1.id
-        WHERE 1 = 1
+        blog.id AS blog_id,
+        blog.title AS blog_title,
+        blog.description AS blog_description,
+        blog.content AS blog_conent,
+        blog.updated_at AS blog_updated_at,
+        blog.created_at AS blog_created_at,
+        blog.user_id AS user_id,
+        user.username AS user_username,
+        user.avatar AS user_avatar,
+        user.updated_at AS user_updated_at,
+        user.created_at AS user_created_at
+        FROM
+        blog
+        LEFT OUTER JOIN user ON blog.user_id = user.id
         <if test="userId != null">
-            AND user_id = #{userId}
+            WHERE blog.user_id = #{userId}
         </if>
+        order by blog.updated_at desc
     </select>
     <update id="updateBlogById" parameterType="Blog">
-        UPDATE blog SET updated_at=NOW()
+        UPDATE blog SET updated_at=now()
         <if test="title != null">
             , title = #{title}
         </if>
@@ -69,18 +70,20 @@
             DELETE FROM blog WHERE id = #{blogId}
         </if>
     </delete>
-    <resultMap type="Blog" id="blogMap">
-        <id column="id" property="id"/>
-        <result column="title" property="title"/>
-        <result column="description" property="description"/>
-        <result column="content" property="content"/>
-        <result column="user_id" property="user_id"/>
-        <result column="created_at" property="created_at"/>
-        <result column="updated_at" property="updated_at"/>
+
+    <resultMap id="blog" type="Blog">
+        <id property="id" column="blog_id"/>
+        <result property="title" column="blog_title"/>
+        <result property="description" column="blog_description"/>
+        <result property="content" column="blog_content"/>
+        <result property="updatedAt" column="blog_updated_at"/>
+        <result property="createdAt" column="blog_created_at"/>
         <association property="user" javaType="User">
-            <result column="user_id" property="id"/>
-            <result column="username" property="username"/>
-            <result column="avatar" property="avatar"/>
+            <id property="id" column="user_id"/>
+            <result property="username" column="user_username"/>
+            <result property="avatar" column="user_avatar"/>
+            <result property="updatedAt" column="user_updated_at"/>
+            <result property="createdAt" column="user_created_at"/>
         </association>
     </resultMap>
 </mapper>

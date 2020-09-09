@@ -12,8 +12,8 @@ public class User {
     @JsonIgnore
     private String password;
     private String avatar;
-    private String created_at;
-    private String updated_at;
+    private String createdAt;
+    private String updatedAt;
 
     public User(String username, String password) {
         this.password = password;

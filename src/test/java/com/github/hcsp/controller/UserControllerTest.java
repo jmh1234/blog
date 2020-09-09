@@ -47,13 +47,13 @@ class UserControllerTest {
 
     @Test
     void isLogin() throws Exception {
-        mockMvc.perform(get("/auth/isLogin")).andExpect(status().isOk())
+        mockMvc.perform(get("/auth")).andExpect(status().isOk())
                 .andExpect(mvcResult -> Assertions.assertTrue(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("用户没有登录")));
     }
 
     @Test
     void login() throws Exception {
-        mockMvc.perform(get("/auth/isLogin")).andExpect(status().isOk())
+        mockMvc.perform(get("/auth")).andExpect(status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("用户没有登录")));
 
         JSONObject jsonObject = new JSONObject();
@@ -72,13 +72,13 @@ class UserControllerTest {
         if (session == null) {
             throw new RuntimeException();
         }
-        mockMvc.perform(get("/auth/isLogin").session((MockHttpSession) session)).andExpect(status().isOk())
+        mockMvc.perform(get("/auth").session((MockHttpSession) session)).andExpect(status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("jhgfcky3")));
     }
 
     @Test
     void logout() throws Exception {
-        mockMvc.perform(get("/auth/isLogin")).andExpect(status().isOk())
+        mockMvc.perform(get("/auth")).andExpect(status().isOk())
                 .andExpect(mvcResult -> Assertions.assertTrue(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("用户没有登录")));
 
         // 登陆
@@ -98,14 +98,14 @@ class UserControllerTest {
         if (session == null) {
             throw new RuntimeException();
         }
-        mockMvc.perform(get("/auth/isLogin").session((MockHttpSession) session)).andExpect(status().isOk())
+        mockMvc.perform(get("/auth").session((MockHttpSession) session)).andExpect(status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("jhgfcky3")));
 
         // 注销
         mockMvc.perform(get("/auth/logout")).andExpect(status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("用户注销成功")));
 
-        mockMvc.perform(get("/auth/isLogin")).andExpect(status().isOk())
+        mockMvc.perform(get("/auth")).andExpect(status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("用户没有登录")));
     }
 
@@ -134,7 +134,7 @@ class UserControllerTest {
         if (session == null) {
             throw new RuntimeException();
         }
-        mockMvc.perform(get("/auth/isLogin").session((MockHttpSession) session)).andExpect(status().isOk())
+        mockMvc.perform(get("/auth").session((MockHttpSession) session)).andExpect(status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("jhgfcky3")));
     }
 }
