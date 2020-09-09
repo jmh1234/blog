@@ -1,9 +1,9 @@
 package com.github.hcsp.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.hcsp.aspect.AuthenticationAspect;
 import com.github.hcsp.entity.Blog;
 import com.github.hcsp.entity.BlogResult;
+import com.github.hcsp.entity.User;
 import com.github.hcsp.service.BlogService;
 import com.github.hcsp.service.impl.AuthService;
 import com.github.hcsp.utils.AssertUtils;
@@ -12,25 +12,32 @@ import com.github.hcsp.utils.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.security.auth.login.LoginException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/blog")
 public class BlogController {
 
-    @Resource
-    private BlogService blogService;
-
-    @Resource
-    private AuthService authService;
-
+    private final BlogService blogService;
+    private final AuthService authService;
     private static final int pageSize = 5;
 
+    @Inject
+    public BlogController(AuthService authService, BlogService blogService) {
+        this.authService = authService;
+        this.blogService = blogService;
+    }
+
     @ResponseBody
-    @AuthenticationAspect
     @PostMapping("/create")
     public BlogResult create(@RequestBody JSONObject blogObject) {
-        return blogService.addBlogInfo(fromParam(blogObject));
+        try {
+            return blogService.addBlogInfo(fromParam(blogObject));
+        } catch (Exception e) {
+            return BlogResult.failure("登录后才能操作");
+        }
     }
 
     @ResponseBody
@@ -46,20 +53,32 @@ public class BlogController {
     }
 
     @ResponseBody
-    @AuthenticationAspect
     @PatchMapping("/updateBlog/{blogId}")
     public BlogResult updateBlog(@PathVariable("blogId") int blogId, @RequestBody JSONObject blogObject) {
-        return blogService.updateBlogById(fromParam(blogObject), blogId);
+        try {
+            return blogService.updateBlogById(fromParam(blogObject), blogId);
+        } catch (Exception e) {
+            return BlogResult.failure("登录后才能操作");
+        }
     }
 
     @ResponseBody
-    @AuthenticationAspect
     @DeleteMapping("/deleteBlog/{blogId}")
     public BlogResult deleteBlog(@PathVariable("blogId") int blogId) {
-        return blogService.deleteBlogById(blogId);
+        try {
+            fromParam(new JSONObject());
+            return blogService.deleteBlogById(blogId);
+        } catch (Exception e) {
+            return BlogResult.failure("登录后才能操作");
+        }
     }
 
-    private Blog fromParam(JSONObject params) {
+    private Blog fromParam(JSONObject params) throws Exception {
+        Optional<User> currentUser = authService.getCurrentUser();
+        if (!currentUser.isPresent()) {
+            throw new LoginException("登录后才能操作");
+        }
+
         String title = params.getString("title");
         String content = params.getString("content");
         String description = params.getString("description");
@@ -68,6 +87,6 @@ public class BlogController {
         if (StringUtils.isBlank(description)) {
             description = content.substring(0, Math.min(content.length(), 10)) + "...";
         }
-        return new Blog(title, description, content, authService.getCurrentUser().get().getId());
+        return new Blog(title, description, content, currentUser.get().getId());
     }
 }
