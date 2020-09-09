@@ -12,7 +12,7 @@ public interface BlogDao {
 
     Blog getBlogInfoById(int blogId);
 
-    List<Blog> getBlogListByUserId(int userId);
+    List<Blog> getBlogListByUserId(Blog blog);
 
     void updateBlogById(Blog blog);
 

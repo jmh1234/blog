@@ -38,7 +38,7 @@ public class ApplicationIntegrationTest {
     public void userTest() throws Exception {
         String url = "http://localhost:" + environment.getProperty("local.server.port");
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            HttpGet httpget = new HttpGet(url + "/auth/isLogin");
+            HttpGet httpget = new HttpGet(url + "/auth");
             httpclient.execute(httpget, (ResponseHandler<String>) httpResponse -> {
                 Assertions.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
                 Assertions.assertTrue(EntityUtils.toString(httpResponse.getEntity()).contains("用户没有登录"));

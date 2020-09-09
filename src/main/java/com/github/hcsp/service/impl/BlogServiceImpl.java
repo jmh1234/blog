@@ -2,14 +2,16 @@ package com.github.hcsp.service.impl;
 
 import com.github.hcsp.dao.BlogDao;
 import com.github.hcsp.entity.Blog;
+import com.github.hcsp.entity.BlogListResult;
 import com.github.hcsp.entity.BlogResult;
+import com.github.hcsp.entity.User;
 import com.github.hcsp.service.BlogService;
-import com.github.hcsp.utils.Pagination;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,12 +19,10 @@ import java.util.Map;
 public class BlogServiceImpl implements BlogService {
 
     private final BlogDao blogDao;
-    private final AuthService authService;
 
     @Inject
-    public BlogServiceImpl(AuthService authService, BlogDao blogDao) {
+    public BlogServiceImpl(BlogDao blogDao) {
         this.blogDao = blogDao;
-        this.authService = authService;
     }
 
     @Override
@@ -37,30 +37,33 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Pagination<Blog> getBlogListByUserId(Map<String, Integer> pageNumAndPageSize, Integer userId) {
+    public BlogListResult getBlogListByUserId(Map<String, Integer> pageNumAndPageSize, Blog blog) {
         int pageNum = pageNumAndPageSize.get("pageNum");
         int pageSize = pageNumAndPageSize.get("pageSize");
         try {
             PageHelper.startPage(pageNum, pageSize);
-            List<Blog> blogList = blogDao.getBlogListByUserId(userId);
+            List<Blog> blogList = blogDao.getBlogListByUserId(blog);
             int total = (int) ((Page) blogList).getTotal();
             Integer totalPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
-            return Pagination.pageOf(blogList, pageSize, pageNum, totalPage, true);
+            return BlogListResult.success(blogList, total, pageNum, totalPage);
+        } catch (NullPointerException e) {
+            return BlogListResult.success(new ArrayList<>(), 0, pageNum, 0);
         } catch (Exception e) {
-            return Pagination.pageOf(null, pageSize, pageNum, 0, false);
+            e.printStackTrace();
+            return BlogListResult.failure("系统异常");
         }
     }
 
     @Override
-    public BlogResult updateBlogById(Blog blog, int blogId) {
-        Blog blog1 = blogDao.getBlogInfoById(blogId);
-        if (blog1 == null) {
+    public BlogResult updateBlogById(int blogId, Blog blog) {
+        Blog oldBlogInfo = blogDao.getBlogInfoById(blogId);
+        if (oldBlogInfo == null) {
             return BlogResult.failure("博客不存在");
         } else {
-            if (!blog1.getUser_id().equals(authService.getCurrentUser().get().getId())) {
+            if (!oldBlogInfo.getUserId().equals(blog.getUser().getId())) {
                 return BlogResult.failure("无法修改别人的博客");
             } else {
-                blog.setId(blog1.getId());
+                blog.setId(oldBlogInfo.getId());
                 blogDao.updateBlogById(blog);
                 return BlogResult.success("获取成功", blogDao.getBlogInfoById(blogId));
             }
@@ -68,12 +71,12 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public BlogResult deleteBlogById(int blogId) {
+    public BlogResult deleteBlogById(int blogId, User user) {
         Blog blog = blogDao.getBlogInfoById(blogId);
         if (blog == null) {
             return BlogResult.failure("博客不存在");
         } else {
-            if (!blog.getUser_id().equals(authService.getCurrentUser().get().getId())) {
+            if (!blog.getUserId().equals(user.getId())) {
                 return BlogResult.failure("无法修改别人的博客");
             } else {
                 blogDao.deleteBlogById(blogId);

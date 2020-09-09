@@ -7,14 +7,14 @@ public class BlogResult extends Result<Blog> {
     }
 
     public static BlogResult success(String msg) {
-        return new BlogResult(ResultStatus.OK, msg, null);
+        return new BlogResult(ResultStatus.ok, msg, null);
     }
 
     public static BlogResult failure(String msg) {
-        return new BlogResult(ResultStatus.FAIL, msg, null);
+        return new BlogResult(ResultStatus.fail, msg, null);
     }
 
     public static BlogResult success(String msg, Blog blog) {
-        return new BlogResult(ResultStatus.OK, msg, blog);
+        return new BlogResult(ResultStatus.ok, msg, blog);
     }
 }

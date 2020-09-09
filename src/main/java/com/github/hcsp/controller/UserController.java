@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("/auth")
 public class UserController {
 
     private final UserService userService;
@@ -39,7 +38,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/isLogin")
+    @GetMapping("/auth")
     public LoginResult isLogin() {
         return authService.getCurrentUser()
                 .map(LoginResult::success)
@@ -47,7 +46,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/logout")
+    @GetMapping("/auth/logout")
     public LoginResult logout() {
         LoginResult ret = authService.getCurrentUser()
                 .map(user -> LoginResult.success("用户注销成功", false))
@@ -57,7 +56,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public LoginResult register(@RequestBody JSONObject usernameAndPassword, HttpServletRequest request) {
         try {
             String username = usernameAndPassword.getString("username");
@@ -76,7 +75,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public Object login(@RequestBody JSONObject usernameAndPassword, HttpServletRequest request) {
         if (request.getHeader("user-agent") == null || !request.getHeader("user-agent").contains("Mozilla")) {
             return "死爬虫去死吧";
