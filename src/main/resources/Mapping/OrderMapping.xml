@@ -5,18 +5,18 @@
 <mapper namespace="com.github.hcsp.dao.TestDao">
     <select id="getOrderRank" resultMap="orderMap">
         SELECT
-            t.id,
-            t.user_id,
-            t1.id                 AS goods_id,
-            t1.NAME,
-            t.price,
-            t.quantity,
+            `order`.id,
+            user_id,
+            goods_id,
+            goods.`name`,
+            price,
+            quantity,
             sum(price * quantity) AS totalPrice
         FROM
-            goods t1
-            LEFT JOIN `order` t ON t.goods_id = t1.id
+            goods
+            LEFT JOIN `order` ON `order`.goods_id = goods.id
         GROUP BY
-            t1.`name`
+            goods.`name`
         ORDER BY
             totalPrice DESC
     </select>
