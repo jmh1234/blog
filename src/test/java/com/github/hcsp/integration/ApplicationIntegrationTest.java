@@ -1,5 +1,6 @@
-package com.github.hcsp;
+package com.github.hcsp.integration;
 
+import com.github.hcsp.Application;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -64,7 +65,7 @@ public class ApplicationIntegrationTest {
     }
 
     private void runSql(String sql) throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.99.100:3306/test?characterEncoding=utf-8&serverTimezone=UTC", "root", "fnst-3d3k");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&serverTimezone=UTC", "root", "fnst-3d3k");
         try (Statement statement = conn.createStatement()) {
             statement.execute(sql);
         }
