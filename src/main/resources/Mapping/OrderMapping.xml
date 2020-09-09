@@ -5,13 +5,15 @@
 <mapper namespace="com.github.hcsp.dao.TestDao">
     <select id="getOrderRank" resultMap="orderMap">
         SELECT
-            goods.name            AS name,
+            goods.`name`          AS name,
             sum(price * quantity) AS totalPrice
-        FROM `order`
-            RIGHT JOIN goods
-                ON `order`.goods_id = goods.id
-        GROUP BY goods.id
-        ORDER BY totalPrice DESC;
+        FROM
+            goods
+            LEFT JOIN `order` ON `order`.goods_id = goods.id
+        GROUP BY
+            goods.`name`
+        ORDER BY
+            totalPrice DESC
     </select>
     <resultMap type="Order" id="orderMap">
         <id column="id" property="id"/>

@@ -1,6 +1,11 @@
 package com.github.hcsp.integration;
 
 import com.github.hcsp.Application;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,12 +13,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.annotation.Resource;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,8 +31,23 @@ import java.util.stream.Collectors;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application.properties")
 public class ApplicationIntegrationTest {
-    @Autowired
-    Environment environment;
+    @Resource
+    private Environment environment;
+
+    @Test
+    public void userTest() throws Exception {
+        String url = "http://localhost:" + environment.getProperty("local.server.port");
+        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            HttpGet httpget = new HttpGet(url + "/auth/isLogin");
+            httpclient.execute(httpget, (ResponseHandler<String>) httpResponse -> {
+                Assertions.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
+                Assertions.assertTrue(EntityUtils.toString(httpResponse.getEntity()).contains("用户没有登录"));
+                return null;
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void test() throws Exception {
