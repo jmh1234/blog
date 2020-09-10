@@ -76,6 +76,7 @@
         <result property="title" column="blog_title"/>
         <result property="description" column="blog_description"/>
         <result property="content" column="blog_content"/>
+        <result property="userId" column="user_id"/>
         <result property="updatedAt" column="blog_updated_at"/>
         <result property="createdAt" column="blog_created_at"/>
         <association property="user" javaType="User">
