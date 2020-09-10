@@ -39,8 +39,7 @@ class UserServiceTest {
     void insertUserInfo() {
         when(mockEncoder.encode("123456")).thenReturn("1234567");
         userService.insertUserInfo("jhgfcky3", "123456");
-        UserDao userDao = Mockito.verify(mockDao);
-        userDao.insertUserInfo("jhgfcky3", "1234567");
+        Mockito.verify(mockDao).insertUserInfo("jhgfcky3", "1234567");
     }
 
     @Test
