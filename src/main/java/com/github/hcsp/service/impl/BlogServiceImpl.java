@@ -57,10 +57,11 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public BlogResult updateBlogById(int blogId, Blog blog) {
         Blog oldBlogInfo = blogDao.getBlogInfoById(blogId);
+        blog.setId(blogId);
         if (oldBlogInfo == null) {
             return BlogResult.failure("博客不存在");
         } else {
-            if (!oldBlogInfo.getUserId().equals(blog.getUser().getId())) {
+            if (!oldBlogInfo.getUserId().equals(blog.getUserId())) {
                 return BlogResult.failure("无法修改别人的博客");
             } else {
                 blog.setId(oldBlogInfo.getId());
