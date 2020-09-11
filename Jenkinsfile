@@ -20,7 +20,6 @@ node {
     }
 }
 
-#!/bin/bash
 def normalCIBuild(String version) {
     stage 'test & package'
 
