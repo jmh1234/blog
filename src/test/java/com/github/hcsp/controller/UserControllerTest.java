@@ -61,7 +61,7 @@ class UserControllerTest {
         jsonObject.put("password", "123456");
 
         Mockito.when(userService.getUserInfoByUsername("jhgfcky3"))
-                .thenReturn(new User("jhgfcky3", bCryptPasswordEncoder.encode("123456")));
+                .thenReturn(new User(1, "jhgfcky3", bCryptPasswordEncoder.encode("123456")));
 
         MvcResult mvcResult = mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
                 .header("user-agent", "[{\"key\":\"User-Agent\",\"value\":\"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1\",\"description\":\"\",\"type\":\"text\",\"enabled\":true}]", "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1")
@@ -87,7 +87,7 @@ class UserControllerTest {
         jsonObject.put("password", "123456");
 
         Mockito.when(userService.getUserInfoByUsername("jhgfcky3"))
-                .thenReturn(new User("jhgfcky3", bCryptPasswordEncoder.encode("123456")));
+                .thenReturn(new User(1, "jhgfcky3", bCryptPasswordEncoder.encode("123456")));
 
         MvcResult mvcResult = mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
                 .header("user-agent", "[{\"key\":\"User-Agent\",\"value\":\"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1\",\"description\":\"\",\"type\":\"text\",\"enabled\":true}]", "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1")
@@ -123,7 +123,7 @@ class UserControllerTest {
 
         // 登录
         Mockito.when(userService.getUserInfoByUsername("jhgfcky3"))
-                .thenReturn(new User("jhgfcky3", bCryptPasswordEncoder.encode("123456")));
+                .thenReturn(new User(1, "jhgfcky3", bCryptPasswordEncoder.encode("123456")));
 
         MvcResult mvcResult = mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
                 .header("user-agent", "[{\"key\":\"User-Agent\",\"value\":\"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1\",\"description\":\"\",\"type\":\"text\",\"enabled\":true}]", "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1")

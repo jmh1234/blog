@@ -17,10 +17,15 @@ public class Blog {
     private Instant createdAt;
     private User user;
 
-//    public Blog(String title, String description, String content, User user) {
-//        this.user = user;
-//        this.title = title;
-//        this.content = content;
-//        this.description = description;
-//    }
+    public Blog() {
+
+    }
+
+    public Blog(Integer id, String title, String description, String content, User user) {
+        this.id = id;
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.description = description;
+    }
 }

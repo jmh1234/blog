@@ -26,4 +26,13 @@ public class BlogListResult extends Result<List<Blog>> {
         this.page = page;
         this.totalPage = totalPage;
     }
+
+    @Override
+    public String toString() {
+        return "BlogListResult{" +
+                "total=" + total +
+                ", page=" + page +
+                ", totalPage=" + totalPage +
+                '}';
+    }
 }
