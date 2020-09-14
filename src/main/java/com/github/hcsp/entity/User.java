@@ -15,7 +15,8 @@ public class User {
     private String createdAt;
     private String updatedAt;
 
-    public User(String username, String password) {
+    public User(Integer id, String username, String password) {
+        this.id = id;
         this.password = password;
         this.username = username;
     }

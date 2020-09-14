@@ -11,8 +11,6 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,16 +36,14 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public BlogListResult getBlogListByUserId(Map<String, Integer> pageNumAndPageSize, Blog blog) {
-        int pageNum = pageNumAndPageSize.get("pageNum");
+        int offset = pageNumAndPageSize.get("offset");
         int pageSize = pageNumAndPageSize.get("pageSize");
         try {
-            PageHelper.startPage(pageNum, pageSize);
-            List<Blog> blogList = blogDao.getBlogListByUserId(blog);
-            int total = (int) ((Page) blogList).getTotal();
+            PageHelper.startPage(offset, pageSize);
+            Page<Blog> blogList = blogDao.getBlogListByUserId(blog);
+            int total = (int) blogList.getTotal();
             Integer totalPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
-            return BlogListResult.success(blogList, total, pageNum, totalPage);
-        } catch (NullPointerException e) {
-            return BlogListResult.success(new ArrayList<>(), 0, pageNum, 0);
+            return BlogListResult.success(blogList, total, pageNumAndPageSize.get("page"), totalPage);
         } catch (Exception e) {
             e.printStackTrace();
             return BlogListResult.failure("系统异常");
@@ -61,12 +57,12 @@ public class BlogServiceImpl implements BlogService {
         if (oldBlogInfo == null) {
             return BlogResult.failure("博客不存在");
         } else {
-            if (!oldBlogInfo.getUserId().equals(blog.getUserId())) {
+            if (!oldBlogInfo.getUser().getId().equals(blog.getUserId())) {
                 return BlogResult.failure("无法修改别人的博客");
             } else {
                 blog.setId(oldBlogInfo.getId());
                 blogDao.updateBlogById(blog);
-                return BlogResult.success("获取成功", blogDao.getBlogInfoById(blogId));
+                return BlogResult.success("修改成功", blogDao.getBlogInfoById(blogId));
             }
         }
     }
@@ -77,7 +73,7 @@ public class BlogServiceImpl implements BlogService {
         if (blog == null) {
             return BlogResult.failure("博客不存在");
         } else {
-            if (!blog.getUserId().equals(user.getId())) {
+            if (!blog.getUser().getId().equals(user.getId())) {
                 return BlogResult.failure("无法修改别人的博客");
             } else {
                 blogDao.deleteBlogById(blogId);

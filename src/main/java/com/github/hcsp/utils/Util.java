@@ -31,10 +31,11 @@ public class Util {
         return resultMap;
     }
 
-    public static Map<String, Integer> getPageNumAndPageSize(int pageSize, int num) {
+    public static Map<String, Integer> getPageNumAndPageSize(int pageSize, int page) {
         Map<String, Integer> resultMap = new HashMap<>();
-        int pageNum = pageSize == 1 ? num * pageSize : (num - 1) * pageSize;
-        resultMap.put("pageNum", pageNum);
+        int offset = pageSize == 1 ? page * pageSize : (page - 1) * pageSize;
+        resultMap.put("page", page);
+        resultMap.put("offset", offset);
         resultMap.put("pageSize", pageSize);
         return resultMap;
     }

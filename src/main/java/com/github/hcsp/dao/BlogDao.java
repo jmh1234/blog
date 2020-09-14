@@ -1,9 +1,8 @@
 package com.github.hcsp.dao;
 
 import com.github.hcsp.entity.Blog;
+import com.github.pagehelper.Page;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface BlogDao {
@@ -12,7 +11,7 @@ public interface BlogDao {
 
     Blog getBlogInfoById(int blogId);
 
-    List<Blog> getBlogListByUserId(Blog blog);
+    Page<Blog> getBlogListByUserId(Blog blog);
 
     void updateBlogById(Blog blog);
 

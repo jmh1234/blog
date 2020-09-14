@@ -14,8 +14,8 @@ public class TestController {
     @Resource
     private TestService testService;
 
-    @CacheAspect(cacheSecond = 2)
     @RequestMapping("/index")
+    @CacheAspect(cacheSecond = 2)
     public ModelAndView index() {
         HashMap<String, Object> model = new HashMap<>();
         model.put("items", testService.getOrderRank());

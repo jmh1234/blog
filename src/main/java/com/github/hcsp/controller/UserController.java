@@ -24,10 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private final AuthService authService;
-
-
     private final AuthenticationManager authenticationManager;
-
     private static final Logger logger = LoggerUtil.getInstance(UserController.class);
 
     @Inject
