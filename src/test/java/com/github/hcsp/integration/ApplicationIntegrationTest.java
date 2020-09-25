@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application.properties")
 public class ApplicationIntegrationTest {
+
     @Resource
     private Environment environment;
 
