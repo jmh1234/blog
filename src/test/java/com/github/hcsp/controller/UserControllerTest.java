@@ -53,7 +53,8 @@ class UserControllerTest {
 
     @Test
     void login() throws Exception {
-        mockMvc.perform(get("/auth")).andExpect(status().isOk())
+        mockMvc.perform(get("/auth"))
+                .andExpect(status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("用户没有登录")));
 
         JSONObject jsonObject = new JSONObject();
