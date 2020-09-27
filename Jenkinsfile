@@ -25,6 +25,11 @@ def normalCIBuild(String version) {
 
     sh('chmod +x ./mvnw && ./mvnw clean package')
 
+    stage('Initialize'){
+            def dockerHome = tool 'myDocker'
+            env.PATH = "${dockerHome}/bin:${env.PATH}"
+        }
+
     stage('docker build')
 
     sh("docker build . -t 146.56.220.117:5000/blog:${version}")
