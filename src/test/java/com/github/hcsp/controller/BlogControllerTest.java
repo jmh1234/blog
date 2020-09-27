@@ -69,10 +69,7 @@ class BlogControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsBytes(blogJson)))
                 .andExpect(status().isOk())
-                .andExpect(result -> {
-                    System.out.println(result.getResponse().getContentAsString(Charset.forName("UTF-8")));
-                    Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("博客新建成功"));
-                });
+                .andExpect(result -> Assertions.assertTrue(result.getResponse().getContentAsString(Charset.forName("UTF-8")).contains("博客新建成功")));
     }
 
     @Test
