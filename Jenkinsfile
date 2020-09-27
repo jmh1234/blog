@@ -25,10 +25,10 @@ def normalCIBuild(String version) {
 
     sh('chmod +x ./mvnw && ./mvnw clean package')
 
-    stage('Initialize'){
-            def dockerHome = tool 'myDocker'
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
-        }
+//    stage('Initialize'){
+//           def dockerHome = tool 'docker'
+//           env.PATH = "${dockerHome}/bin:${env.PATH}"
+//       }
 
     stage('docker build')
 
