@@ -39,7 +39,7 @@ def normalCIBuild(String version) {
 }
 
 def deployVersion(String version) {
-    sh "ssh ubuntu@146.56.220.117 'sudo docker rm -f blog && sudo docker run --name=blog -d -p 8080:8080 146.56.220.117:5000/blog:${version}'"
+    sh "ssh ubuntu@146.56.220.117 'sudo docker rm -f blog && sudo docker run --name=blog -d -p 8080:8080 -v `pwd`/tmp/application.properties:/app/application.properties 146.56.220.117:5000/blog:${version}'"
 }
 
 def setScmPollStrategyAndBuildTypes(List buildTypes) {
