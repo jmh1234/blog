@@ -8,7 +8,8 @@
 
 ### mysql数据库连接信息
 ```
-用户名: test
+数据库名称: test
+用户名: root
 密码: fnst-3d3k
 ```
 
@@ -33,7 +34,7 @@ docker run --restart=always --name=nginx -v `pwd`/nginx.conf:/etc/nginx/nginx.co
 
 jenkins 控制台地址: [146.56.220.117:8081](http://146.56.220.117:8081)  
 
-### 私有镜像 registry docker 启动命令
+### 私有镜像仓库 registry docker 启动命令
 ```
 docker run -d --name=registry --restart=always -p 5000:5000 -v /data/registry:/tmp/registry registry
 ```
