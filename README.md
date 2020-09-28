@@ -28,14 +28,13 @@ docker run --restart=always --name=nginx -v `pwd`/nginx.conf:/etc/nginx/nginx.co
 ```
 
 ## jenkins 
+
+jenkins 控制台地址: [146.56.220.117:8081](http://146.56.220.117:8081)  
+
 ### 私有镜像 registry docker 启动命令
 ```
 docker run -d --name=registry --restart=always -p 5000:5000 -v /data/registry:/tmp/registry registry
 ```
-
-###  jenkins 控制台
-
-jenkins 控制台地址: [146.56.220.117:8081](http://146.56.220.117:8081)
 
 ### jenkins docker启动命令
 ```
