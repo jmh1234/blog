@@ -1,5 +1,8 @@
 # blog
 
+## demo
+这里提供了一个简单的 [demo site](http://146.56.220.117)，可以查看blog应用的详细信息。
+
 ## mysql数据库
 ### mysql数据库连接信息
 ```
@@ -29,6 +32,10 @@ docker run --restart=always --name=nginx -v `pwd`/nginx.conf:/etc/nginx/nginx.co
 ```
 docker run -d --name=registry --restart=always -p 5000:5000 -v /data/registry:/tmp/registry registry
 ```
+
+###  jenkins 控制台
+
+jenkins 控制台地址: [146.56.220.117:8081](http://146.56.220.117:8081)
 
 ### jenkins docker启动命令
 ```
