@@ -30,6 +30,25 @@ docker run -d -p 6379:6379 --name=redis redis
 docker run --restart=always --name=nginx -v `pwd`/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx 
 ```
 
+### Nginx.conf 文件内容详情
+```
+events{ }
+
+http {
+    upstream myapp1 {
+        server 146.56.220.117:8080;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://myapp1;
+        }
+    }
+}
+```
+
 ## jenkins 
 
 jenkins 控制台地址: [146.56.220.117:8081](http://146.56.220.117:8081)  
