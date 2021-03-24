@@ -15,19 +15,19 @@
 
 ### mysql数据库docker启动命令
 ```
-docker run -d -p 3306:3306 --name=mysql -e MYSQL_ROOT_PASSWORD=fnst-3d3k -e MYSQL_DATABASE=test mysql
+docker run --restart=always -d -p 3306:3306 --name=mysql -e MYSQL_ROOT_PASSWORD=fnst-3d3k -e MYSQL_DATABASE=test mysql
 ```
 
 ## Redis
 ### Redis docker 启动命令
 ```
-docker run -d -p 6379:6379 --name=redis redis
+docker run --restart=always -d -p 6379:6379 --name=redis redis
 ```
 
 ## Nginx
 ### Nginx docker 启动命令
 ```
-docker run --restart=always --name=nginx -v `pwd`/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx 
+docker run --restart=always --name=nginx -v `pwd`/tmp/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx 
 ```
 
 ### Nginx.conf 文件内容详情
@@ -55,7 +55,7 @@ jenkins 控制台地址: [146.56.220.117:8081](http://146.56.220.117:8081)
 
 ### 私有镜像仓库 registry docker 启动命令
 ```
-docker run -d --name=registry --restart=always -p 5000:5000 -v /data/registry:/tmp/registry registry
+docker run --restart=always -d --name=registry --restart=always -p 5000:5000 -v /data/registry:/tmp/registry registry
 ```
 
 ### jenkins docker启动命令
