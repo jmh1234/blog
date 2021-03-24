@@ -55,7 +55,7 @@ jenkins 控制台地址: [146.56.220.117:8081](http://146.56.220.117:8081)
 
 ### 私有镜像仓库 registry docker 启动命令
 ```
-docker run -d --name=registry --restart=always -p 5000:5000 -v /data/registry:/tmp/registry registry
+docker run --restart=always -d --name=registry --restart=always -p 5000:5000 -v /data/registry:/tmp/registry registry
 ```
 
 ### jenkins docker启动命令
