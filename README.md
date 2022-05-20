@@ -10,7 +10,7 @@
 ```
 数据库名称: test
 用户名: root
-密码: fnst-3d3k
+密码: Pn123456
 ```
 
 ### mysql数据库docker启动命令
